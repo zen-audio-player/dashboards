@@ -1,11 +1,11 @@
 var client = new Keen({
-  projectId: "5337e28273f4bb4499000000",
-  readKey: "8827959317a6a01257bbadf16c12eff4bc61a170863ca1dadf9b3718f56bece1ced94552c6f6fcda073de70bf860c622ed5937fcca82d57cff93b432803faed4108d2bca310ca9922d5ef6ea9381267a5bd6fd35895caec69a7e414349257ef43a29ebb764677040d4a80853e11b8a3f"
+  projectId: "561c5bdf2fd4b1643d829323",
+  readKey: "7977e2ea3bce280c3796afde807c18d7110867e3cf48a87b199885e9a59ca038fc1ffb4cb8b9ff7eaae069b9157ded3824a4aa3bb35a1c0d95b520bf7974636000546a98d7395a369a034a555ca7e6f9ab007dd786db7426f5829a738bba7821243447f190c37d14dd55b7540569dca4"
 });
 
 var geoProject = new Keen({
-  projectId: "53eab6e12481962467000000",
-  readKey: "d1b97982ce67ad4b411af30e53dd75be6cf610213c35f3bd3dd2ef62eaeac14632164890413e2cc2df2e489da88e87430af43628b0c9e0b2870d0a70580d5f5fe8d9ba2a6d56f9448a3b6f62a5e6cdd1be435c227253fbe3fab27beb0d14f91b710d9a6e657ecf47775281abc17ec455"
+  projectId: "561c5bdf2fd4b1643d829323",
+  readKey: "7977e2ea3bce280c3796afde807c18d7110867e3cf48a87b199885e9a59ca038fc1ffb4cb8b9ff7eaae069b9157ded3824a4aa3bb35a1c0d95b520bf7974636000546a98d7395a369a034a555ca7e6f9ab007dd786db7426f5829a738bba7821243447f190c37d14dd55b7540569dca4"
 });
 
 Keen.ready(function(){
@@ -14,9 +14,9 @@ Keen.ready(function(){
   // Visitors Timeline
   // ----------------------------------------
   var new_users = new Keen.Query("count", {
-    eventCollection: "activations",
-    interval: "monthly",
-    timeframe: "this_year"
+    eventCollection: "Playing YouTube video",
+    timeframe: "this_year",
+    interval: "monthly"
   });
   geoProject.draw(new_users, document.getElementById("visitors"), {
     chartType: "areachart",
@@ -39,10 +39,10 @@ Keen.ready(function(){
   // Visitors by Browser Timeline
   // ----------------------------------------
   var browser = new Keen.Query("count", {
-    eventCollection: "activations",
+    eventCollection: "Playing YouTube video",
     timeframe: "this_year",
-    interval: "monthly",
-    groupBy: "device_model_name"
+    interval: "monthly"//,
+    // groupBy: "device_model_name"
   });
   geoProject.draw(browser, document.getElementById("browser"), {
     title: "Visits by Browser",
@@ -63,12 +63,13 @@ Keen.ready(function(){
   // Visitors by State
   // ----------------------------------------
   var state = new Keen.Query("count", {
-    eventCollection: "visit",
-    groupBy: "visitor.geo.province"
+    eventCollection: "Playing YouTube video",
+    groupBy: "ip_geo_info.country",
+    timeframe: "this_year"
   });
   client.draw(state, document.getElementById("geography"), {
     chartType: "columnchart",
-    title: "Visits by State",
+    title: "Visits by Country",
     height: 300,
     width: 475,
     chartOptions: {
@@ -79,16 +80,17 @@ Keen.ready(function(){
         left: "12%",
         width: "100%"
       }
-    },
-    labelMapping: {
-      "New Jersey" : "NJ",
-      "Virginia" : "VA",
-      "California": "CA",
-      "Washington": "WA",
-      "Utah": "UT",
-      "Oregon": "OR",
-      "null": "Other"
     }
+    // ,
+    // labelMapping: {
+    //   "New Jersey" : "NJ",
+    //   "Virginia" : "VA",
+    //   "California": "CA",
+    //   "Washington": "WA",
+    //   "Utah": "UT",
+    //   "Oregon": "OR",
+    //   "null": "Other"
+    // }
   });
 
 
@@ -112,7 +114,7 @@ Keen.ready(function(){
     width: '95%'
   });
   var geoUsers = geoProject.run(users, function(err, res){
-    $(".users").val(res.result).trigger('change');
+    // $(".users").val(res.result).trigger('change');
   });
 
 
