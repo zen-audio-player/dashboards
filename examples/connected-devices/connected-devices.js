@@ -36,20 +36,21 @@ Keen.ready(function(){
   });
 
   // ----------------------------------------
-  // Visitors by Browser Timeline
+  // Visitors by Browser Pie chart
   // ----------------------------------------
   var browser = new Keen.Query("count", {
     eventCollection: "Playing YouTube video",
-    timeframe: "this_year",
-    interval: "monthly"//,
-    // groupBy: "device_model_name"
+    timeframe: "this_year",    
+    groupBy: [
+      "parsed_user_agent.browser.family"
+    ]
   });
   geoProject.draw(browser, document.getElementById("browser"), {
+    chartType: "piechart",
     title: "Visits by Browser",
     height: 300,
     width: 475,
     chartOptions: {
-      legend: { position: "none" },
       chartArea: {
         height: "78%",
         top: "15%",
@@ -60,7 +61,7 @@ Keen.ready(function(){
   });
 
   // ----------------------------------------
-  // Visitors by State
+  // Visitors by Country
   // ----------------------------------------
   var state = new Keen.Query("count", {
     eventCollection: "Playing YouTube video",
@@ -68,12 +69,11 @@ Keen.ready(function(){
     timeframe: "this_year"
   });
   client.draw(state, document.getElementById("geography"), {
-    chartType: "columnchart",
+    chartType: "piechart",
     title: "Visits by Country",
     height: 300,
     width: 475,
     chartOptions: {
-      legend: { position: "none" },
       chartArea: {
         height: "78%",
         top: "15%",
