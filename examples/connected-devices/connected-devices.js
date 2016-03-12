@@ -200,7 +200,7 @@ Keen.ready(function(){
       lat: 37.77350,
       lng: -122.41104
     },
-    zoom: 11
+    zoom: 3
   };
 
   var initialize,
@@ -261,7 +261,7 @@ Keen.ready(function(){
     });
 
     var scoped_events = new Keen.Query("select_unique", {
-      eventCollection: "user_action",
+      eventCollection: "Playing YouTube video",
       targetProperty: "keen.location.coordinates",
       timeframe: tframe,
       filters: geoFilter
