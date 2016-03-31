@@ -7,7 +7,8 @@ var geoProject = new Keen({
   projectId: "5690c384c1e0ab0c8a6c59c4",
   readKey: "03da022055879f2d36259f1b4ab9e690ea081e8b6bbc3013e8d8c3c80387892ed8f8c9a41c7c4dbfb994b0ce779232c4cfda142be5fe02c0210fef64cd108056b759ec5873c01db269505e9ddce53e65a62573664eb901ff6dbe183bd6033860632e22234e8127976efbe276bd817c19"
 });
-
+// TODO: remove
+var removeme = null;
 Keen.ready(function(){
 
   // ----------------------------------------
@@ -93,55 +94,19 @@ Keen.ready(function(){
     // }
   });
 
-
-  // ----------------------------------------
-  // Users
-  // ----------------------------------------
-
-  var users = new Keen.Query("count_unique", {
-    eventCollection: "activations",
-    targetProperty: "user.id"
+  // TODO: ZAP usage
+  var state = new Keen.Query("extraction", {
+    eventCollection: "Playing YouTube video",
+    timeframe: "this_year",
+    property_names: ["title", "author", "youtubeID"] // TODO: add video ID
   });
 
-  $(".users").knob({
-    'angleArc':250,
-    'angleOffset':-125,
-    'readOnly':true,
-    'min':0,
-    'max':500,
-    'fgColor': Keen.Dataviz.defaults.colors[0],
-    height: 290,
-    width: '95%'
+  // TODO: make a Keen.DataViz instance & iterate the results of state to (unique, sum & remove ID property before displaying)
+
+  client.draw(state, document.getElementById("extract-pageviews-table"), {
+    chartType: "table",
+    title: "ZAP Usage"
   });
-  var geoUsers = geoProject.run(users, function(err, res){
-    // $(".users").val(res.result).trigger('change');
-  });
-
-
-  // ----------------------------------------
-  // Errors Detected
-  // ----------------------------------------
-
-
-  var errors = new Keen.Query("count", {
-    eventCollection: "user_action",
-    filters: [{"property_name":"error_detected","operator":"eq","property_value":true}]
-  });
-
-  $(".errors").knob({
-    'angleArc':250,
-    'angleOffset':-125,
-    'readOnly':true,
-    'min':0,
-    'max':100,
-    'fgColor': Keen.Dataviz.defaults.colors[1],
-    height: 290,
-    width: '95%'
-  });
-  geoProject.run(errors, function(err, res){
-    $(".errors").val(res.result).trigger('change');
-  });
-
 
   // ----------------------------------------
   // Funnel
@@ -267,7 +232,7 @@ Keen.ready(function(){
       filters: geoFilter
     });
     var result = geoProject.run(scoped_events, function(err, res){
-      console.log("events", res);
+      // console.log("events", res);
       activeMapData.clearLayers();
 
       Keen.utils.each(res.result, function(coord, index){
@@ -300,7 +265,7 @@ Keen.ready(function(){
       else {
         radius = 10000/Math.pow(2,z);
       }
-      console.log(center, radius);
+      // console.log(center, radius);
 
 
 
