@@ -98,14 +98,55 @@ Keen.ready(function(){
   var state = new Keen.Query("extraction", {
     eventCollection: "Playing YouTube video",
     timeframe: "this_year",
-    property_names: ["title", "author", "youtubeID"] // TODO: add video ID
+    property_names: ["title", "author", "youtubeID"]
   });
 
-  // TODO: make a Keen.DataViz instance & iterate the results of state to (unique, sum & remove ID property before displaying)
+  var zapUsageTable = new google.visualization.DataTable();
+  zapUsageTable.addColumn("string", "Title");
+  zapUsageTable.addColumn("string", "Author");
+  zapUsageTable.addColumn("string", "Youtube ID");
+  zapUsageTable.addColumn("number", "Count");
 
-  client.draw(state, document.getElementById("extract-pageviews-table"), {
-    chartType: "table",
-    title: "ZAP Usage"
+  client.run(state, function(err, res) {
+    if (err) {
+        // there was an error!
+    }
+    else {
+        var results = res.result;
+        var resultMap = {};
+        var output = [];
+
+        // Store unique & counts only
+        for (var r in res.result) {
+            var cur = res.result[r];
+            if (cur.youtubeID) {
+                if (resultMap[cur.youtubeID]) {
+                    resultMap[cur.youtubeID].count++;
+                }
+                else {
+                    resultMap[cur.youtubeID] = {
+                        count: 1,
+                        title: cur.title || "",
+                        author: cur.author || ""
+                    };
+                }
+            }
+        }
+
+        // Back to csv-like data
+        for (var r in resultMap) {
+            if (resultMap.hasOwnProperty(r)) {
+                var cur = resultMap[r];
+                output.push([cur.title, cur.author, r, cur.count]);
+            }
+        }
+
+        zapUsageTable.addRows(output);
+        zapUsageTable.sort([{column: 3, desc: true}]);
+        zapUsageTable.removeRows(5, Number.MAX_VALUE);
+        var zapUsageTableInstance = new google.visualization.Table(document.getElementById('extract-pageviews-table'));
+        zapUsageTableInstance.draw(zapUsageTable, {title: "foo", showRowNumber: false, width: '100%', height: '100%'});
+    }
   });
 
   // ----------------------------------------
