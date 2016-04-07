@@ -16,8 +16,8 @@ Keen.ready(function(){
   // ----------------------------------------
   var new_users = new Keen.Query("count", {
     eventCollection: "Playing YouTube video",
-    timeframe: "this_year",
-    interval: "monthly"
+    timeframe: "this_31_days",
+    interval: "daily"
   });
   geoProject.draw(new_users, document.getElementById("visitors"), {
     chartType: "areachart",
@@ -32,7 +32,7 @@ Keen.ready(function(){
         left: "8%",
         width: "85%"
       },
-      hAxis: { format: 'MMM', maxTextLines: 1 }
+      hAxis: { format: 'MMM d', maxTextLines: 1 }
     }
   });
 
@@ -41,7 +41,7 @@ Keen.ready(function(){
   // ----------------------------------------
   var browser = new Keen.Query("count", {
     eventCollection: "Playing YouTube video",
-    timeframe: "this_year",    
+    timeframe: "this_31_days",    
     groupBy: [
       "parsed_user_agent.browser.family"
     ]
@@ -67,7 +67,7 @@ Keen.ready(function(){
   var state = new Keen.Query("count", {
     eventCollection: "Playing YouTube video",
     groupBy: "ip_geo_info.country",
-    timeframe: "this_year"
+    timeframe: "this_31_days"
   });
   client.draw(state, document.getElementById("geography"), {
     chartType: "piechart",
